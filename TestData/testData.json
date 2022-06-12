@@ -1,0 +1,11 @@
+{
+    "users": {
+        "base": {
+            "admin": {
+                "userName": "Dariusz",
+                "password": "haslo",
+                "email": "darek@gmail.com"
+            }
+        }
+    }
+}

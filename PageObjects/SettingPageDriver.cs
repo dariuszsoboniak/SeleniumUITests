@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using Phlex.Core.TestInfrastructure.Selenium;
-using SeleniumExtras.PageObjects;
 using Shouldly;
 
 namespace SeleniumUITests.PageObjects
@@ -24,7 +23,5 @@ namespace SeleniumUITests.PageObjects
         }
 
         public IWebElement LogOutButton => _driver.FindElement(With.TagAndAttribute("button", "data-cy", "logout"));
-
-
     }
 }

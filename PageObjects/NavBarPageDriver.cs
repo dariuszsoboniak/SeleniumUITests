@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Phlex.Core.TestInfrastructure.Selenium;
 using SeleniumExtras.PageObjects;
+using Shouldly;
 
 namespace SeleniumUITests.PageObjects
 {
@@ -16,6 +17,19 @@ namespace SeleniumUITests.PageObjects
             PageFactory.InitElements(driver, this);
         }
 
+        public void NavigateToLoginPage()
+        {
+            SignInButton.Displayed.ShouldBeTrue();
+            SignInButton.Enabled.ShouldBeTrue();
+            SignInButton.Click();
+        }
+
+        public void NavigateToSettingPage()
+        {
+            SettingButton.Displayed.ShouldBeTrue();
+            SettingButton.Enabled.ShouldBeTrue();
+            SettingButton.Click();
+        }
 
         public void WatiForPageDisplay()
         {
@@ -28,11 +42,9 @@ namespace SeleniumUITests.PageObjects
 
         public IWebElement SignInButton => signInButton;
 
-
         public IWebElement HomeButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "home"));
         public IWebElement NewPostButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "new-post"));
         public IWebElement SettingButton => _driver.FindElement(With.TagAndAttribute("a", "href", "/settings"));
         public IWebElement UserButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "profile"));
-
     }
 }

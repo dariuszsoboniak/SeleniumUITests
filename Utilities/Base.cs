@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -57,7 +56,6 @@ namespace SeleniumUITests.Utilities
                     driver = new EdgeDriver();
                     break;
             }
-
         }
 
         public User User;
@@ -69,7 +67,6 @@ namespace SeleniumUITests.Utilities
             driver.Close();
             driver.Quit();
         }
-
 
         public LoginPageDriver LoginPage;
         public NavBarPageDriver NavBarPage;

@@ -9,8 +9,11 @@ namespace SeleniumUITests.Selenium
         public static IConfigurationRoot LoadTestData()
         {
             var testDataBuldier = new ConfigurationBuilder();
-            var basePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData");
-            testDataBuldier.SetBasePath(basePath);
+
+            string workingDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+            string testDataPath = projectDirectory + "\\TestData";
+            testDataBuldier.SetBasePath(testDataPath);
 
             testDataBuldier.AddJsonFile("testData.json");
 

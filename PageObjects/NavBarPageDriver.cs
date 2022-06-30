@@ -8,20 +8,13 @@ using Shouldly;
 namespace SeleniumUITests.PageObjects
 {
     public class NavBarPageDriver
-    {
-        private readonly IWebDriver _driver;
-
-        public NavBarPageDriver(IWebDriver driver)
-        {
-            _driver = driver;
-            PageFactory.InitElements(driver, this);
-        }
-
+    {   
         public void NavigateToLoginPage()
         {
             SignInButton.Displayed.ShouldBeTrue();
             SignInButton.Enabled.ShouldBeTrue();
             SignInButton.Click();
+            LoginPage.VerifyLoginPageTitleIsDisplayed();
         }
 
         public void NavigateToSettingPage()
@@ -29,6 +22,12 @@ namespace SeleniumUITests.PageObjects
             SettingButton.Displayed.ShouldBeTrue();
             SettingButton.Enabled.ShouldBeTrue();
             SettingButton.Click();
+            VerifySetiingsTitleIsDisplayed();
+        }
+
+        public void VerifySetiingsTitleIsDisplayed()
+        {
+            SettingTitle.Displayed.ShouldBeTrue();
         }
 
         public void WatiForPageDisplay()
@@ -37,14 +36,26 @@ namespace SeleniumUITests.PageObjects
             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(With.TagAndAttribute("a", "href", "/settings")));
         }
 
+        public NavBarPageDriver(IWebDriver driver)
+        {
+            _driver = driver;
+            LoginPage = new LoginPageDriver(driver);
+            PageFactory.InitElements(driver, this);
+        }
+
+        private readonly IWebDriver _driver;
+        LoginPageDriver LoginPage;
+
         [FindsBy(How = How.LinkText, Using = "Sign in")]
         private readonly IWebElement signInButton;
 
         public IWebElement SignInButton => signInButton;
-
         public IWebElement HomeButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "home"));
         public IWebElement NewPostButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "new-post"));
         public IWebElement SettingButton => _driver.FindElement(With.TagAndAttribute("a", "href", "/settings"));
         public IWebElement UserButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "profile"));
+        public IWebElement SettingTitle => _driver.FindElement(With.TagAndClassAndText("h1", "text-xs-center", "Your Settings"));
+
+        
     }
 }

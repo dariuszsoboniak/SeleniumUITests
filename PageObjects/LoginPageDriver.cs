@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using Phlex.Core.TestInfrastructure.Selenium;
 using SeleniumExtras.PageObjects;
 using SeleniumUITests.Models;
 using Shouldly;
@@ -7,14 +8,6 @@ namespace SeleniumUITests.PageObjects
 {
     public  class LoginPageDriver
     {
-        private readonly IWebDriver _driver;
-
-        public LoginPageDriver(IWebDriver driver)
-        {
-            _driver = driver;
-            PageFactory.InitElements(driver, this);
-        }
-
         public void LogIn(User user)
         {
             EnterEmail(user.Email);
@@ -38,7 +31,23 @@ namespace SeleniumUITests.PageObjects
         {
             LoginButton.Displayed.ShouldBeTrue();
             LoginButton.Click();
+            UserFeedPage.VerifyYourFeedTabIsDisplayed();
         }
+
+        public void VerifyLoginPageTitleIsDisplayed()
+        {
+            SignInTitle.Displayed.ShouldBeTrue();
+        }
+
+        public LoginPageDriver(IWebDriver driver)
+        {
+            _driver = driver;
+            UserFeedPage = new UserFeedPageDriver(driver);
+            PageFactory.InitElements(driver, this);
+        }
+
+        private readonly IWebDriver _driver;
+        UserFeedPageDriver UserFeedPage;
 
         [FindsBy(How = How.CssSelector, Using = "[placeholder='Email']")]
         private readonly IWebElement emailField;
@@ -50,5 +59,6 @@ namespace SeleniumUITests.PageObjects
         public IWebElement EmailField => emailField;
         public IWebElement PasswordField => passwordField;
         public IWebElement LoginButton => logInButton;
+        public IWebElement SignInTitle => _driver.FindElement(With.TagAndClassAndText("h1", "text-xs-center", "Sign In"));
     }
 }

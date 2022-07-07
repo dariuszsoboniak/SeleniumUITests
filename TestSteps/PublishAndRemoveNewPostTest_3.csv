@@ -1,0 +1,7 @@
+﻿Step,Action,Result
+1,Zaloguj się istniejacym użytkownikiem ,Użytkownik został zalogowany. Strona użytkownika została wczytana.
+2,Kliknij przycisk 'New Post',Strona z formularzem dla nowego posta została wyświetlona
+3,Wyepłnij wszystkie pola (Article Title About Article Tags),Wszystkie pola zostały wypełnione
+4,Kliknij przycisk 'Publish Article',Artykuł został opublikowany. Strona z artykułem została wyświetlona.
+5,Kliknij przycisk 'Delete Article',Artykuł został usunięty. Wyświetlona została główna strona użytkownika.
+6,Wyloguj się,Użytkownik został wylogowany.

@@ -1,0 +1,6 @@
+﻿Step,Action,Result
+1,Kliknij przycisk 'Sing up',Strona z formularzem rejestracyjnym została wczytana.
+2,Wpisz wartość w pole 'Username',Wartość pola 'Username' została wypełniona.
+3,Wpisz wartość w pole 'Email',Wartość pola 'Email' została wypełniona.
+4,Wpisz wartość w pole Password',Wartość pola 'Password' została wypełniona.
+5,Kliknij zielony przycisk 'Sing up' poniżej formularza,Użytkownik został stworzony. Strona użytkownika została wczytana.

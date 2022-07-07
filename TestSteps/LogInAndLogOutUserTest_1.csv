@@ -1,0 +1,7 @@
+﻿Step,Action,Result
+1,Kliknij przycisk 'Sing in',Strona z formularzem logowania została wczytana.
+2,Wpisz wartość w pole 'Email',Wartość pola 'Email' została wypełniona.
+3,Wpisz wartość w pole 'Password',Wartość pola 'Password' została wypełniona.
+4,Kliknij zielony przycisk 'Sing in' poniżej formularza,Użytkownik został zalogowany. Strona użytkownika została wczytana.
+5,Kliknij przycisk 'Settings',Strona z ustawieniami użytkownika została wczytana.
+6,Kliknij przycisk 'Or click here to logout.',Użytkownik został poprawnie wylogowany. Strona startowa została wczytana.

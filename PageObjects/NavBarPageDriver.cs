@@ -25,9 +25,54 @@ namespace SeleniumUITests.PageObjects
             VerifySetiingsTitleIsDisplayed();
         }
 
+        public void NavigateToRegisterPage()
+        {
+            SignUpButton.Displayed.ShouldBeTrue();
+            SignUpButton.Enabled.ShouldBeTrue();
+            SignUpButton.Click();
+            VerifySignUpTitleIsDisplayed();
+        }
+
+        public void NavigateToNewPostPage()
+        {
+            NewPostButton.Displayed.ShouldBeTrue();
+            NewPostButton.Enabled.ShouldBeTrue();
+            NewPostButton.Click();
+            VerifyPublishArticleButtonIsDisplayed();
+        }
+
+        public void NavigateToUserPage()
+        {
+            UserButton.Displayed.ShouldBeTrue();
+            UserButton.Enabled.ShouldBeTrue();
+            UserButton.Click();
+            VerifyProfilPageIsDisplayed();
+        }
+
         public void VerifySetiingsTitleIsDisplayed()
         {
             SettingTitle.Displayed.ShouldBeTrue();
+        }
+
+        public void VerifySignUpTitleIsDisplayed()
+        {
+            SignUpTitle.Displayed.ShouldBeTrue();
+        }
+
+        public void VerifyPublishArticleButtonIsDisplayed()
+        {
+            PublishArticleButton.Displayed.ShouldBeTrue();
+        }
+
+        public void VerifyProfilPageIsDisplayed()
+        {
+            ProfilPage.Displayed.ShouldBeTrue();
+        }
+
+        public void VerifyThumbnailIsDispayed(string expectedUrlPicture)
+        {
+            var test = ThumbnailPicture.GetAttribute("src");
+            test.ShouldBe(expectedUrlPicture);
         }
 
         public void WatiForPageDisplay()
@@ -50,12 +95,15 @@ namespace SeleniumUITests.PageObjects
         private readonly IWebElement signInButton;
 
         public IWebElement SignInButton => signInButton;
+        public IWebElement SignUpButton => _driver.FindElement(With.TagAndAttribute("a", "href", "/register"));
         public IWebElement HomeButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "home"));
         public IWebElement NewPostButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "new-post"));
         public IWebElement SettingButton => _driver.FindElement(With.TagAndAttribute("a", "href", "/settings"));
+        public IWebElement PublishArticleButton => _driver.FindElement(With.TagAndAttribute("button", "data-cy", "publish"));
         public IWebElement UserButton => _driver.FindElement(With.TagAndAttribute("li", "data-cy", "profile"));
         public IWebElement SettingTitle => _driver.FindElement(With.TagAndClassAndText("h1", "text-xs-center", "Your Settings"));
-
-        
+        public IWebElement SignUpTitle => _driver.FindElement(With.TagAndClassAndText("h1", "text-xs-center", "Sign Up"));
+        public IWebElement ProfilPage => _driver.FindElement(With.ClassName("profile-page"));
+        public IWebElement ThumbnailPicture => _driver.FindElement(With.ClassName("user-pic"));
     }
 }

@@ -1,0 +1,7 @@
+﻿Step,Action,Result
+1,Zaloguj się istniejacym użytkownikiem ,Użytkownik został zalogowany. Strona użytkownika została wczytana.
+2,Kliknij przycisk z nazwą użytkownika,Strona użytkownika została wyświetlona
+3,Kliknij przycisk 'Edit Profile Seettings',Strona z ustawieniami użytkownika została wczytana.
+4,Wklej link obrazu w pole 'URL of profile picture',Link został wklejony
+5,Kliknij przycisk 'Update Settings',Załadowany obraz pojawił się przy nazwie użytkownika. Aplikacja wrocła do głównej strony użytkownika.
+6,Wyloguj się,Użytkownik został wylogowany.

@@ -1,37 +1,41 @@
 ﻿using NUnit.Framework;
 using SeleniumUITests.Helpers;
 using SeleniumUITests.Utilities;
+using System;
 
 namespace SeleniumUITests.Tests
 {
-    public class LogInAndLogOutUserTest1 : Base
+    public class PublishAndRemoveNewPostTest3 : Base
     {
         [Test]
-        public void LogInAndLogOutUserTest_1()
+        public void PublishAndRemoveNewPostTest_3()
         {
-            var test = CsvReaderHelper.ReadStepsFromCsv("LogInAndLogOutUserTest_1");
+            var test = CsvReaderHelper.ReadStepsFromCsv("PublishAndRemoveNewPostTest_3");
+            var post = TestData.Posts["default"]["primary"];
 
             //Step 1
             NavBarPage.NavigateToLoginPage();
+            LoginPage.LogIn(User);
             AddReportStep(test[0]);
 
             //Step 2
-            LoginPage.EnterEmail(User.Email);
+            NavBarPage.NavigateToNewPostPage();
             AddReportStep(test[1]);
 
             //Step 3
-            LoginPage.EnterPassword(User.Password);
+            NewPostPage.PopulateNewPostFields(post);
             AddReportStep(test[2]);
 
             //Step 4
-            LoginPage.ClickLoginButton();
+            NewPostPage.ClickPublishArticleButton();
             AddReportStep(test[3]);
 
             //Step 5
-            NavBarPage.NavigateToSettingPage();
+            ArticlePage.DeleteArticle();
             AddReportStep(test[4]);
 
-            //Step 6
+            //Step 5
+            NavBarPage.NavigateToSettingPage();
             SettingPage.Logout();
             AddReportStep(test[5]);
         }

@@ -4,6 +4,7 @@ using SeleniumUITests.Utilities;
 
 namespace SeleniumUITests.Tests
 {
+    [Parallelizable(ParallelScope.Self)]
     public class LogInAndLogOutUserTest1 : Base
     {
         [Test]

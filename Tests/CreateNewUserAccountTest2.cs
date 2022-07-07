@@ -5,6 +5,7 @@ using System;
 
 namespace SeleniumUITests.Tests
 {
+    [Parallelizable(ParallelScope.Self)]
     public class CreateNewUserAccountTest2 : Base
     {
         [Test]

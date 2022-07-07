@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Threading;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using Microsoft.Extensions.Configuration;
@@ -19,32 +19,15 @@ namespace SeleniumUITests.Utilities
 {
     public class Base
     {
-        private IWebDriver driver;
-        private ExtentReports extent;
-        private ExtentTest test;
-        private readonly string browserName = System.Configuration.ConfigurationManager.AppSettings["browser"];
-        private readonly string url = System.Configuration.ConfigurationManager.AppSettings["url"];
-
-        [OneTimeSetUp]
-        public void SetupReport()
-        {
-            string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-            string reportpath = projectDirectory + "//index.html";
-            var htmlReporter = new ExtentHtmlReporter(reportpath);
-            extent = new ExtentReports();
-            extent.AttachReporter(htmlReporter);
-            extent.AddSystemInfo("Browser", browserName);
-            extent.AddSystemInfo("Environment", url);
-        }
-
         [SetUp]
         public void Setup()
         {
-            test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
+            currenTestName = TestContext.CurrentContext.Test.Name;
+            SetupReport(currenTestName);
+            test = extent.CreateTest(currenTestName);
             InitBrowser(browserName);
 
-            driver.Url = url;
+            driver.Value.Url = url;
 
             var testDataSource = new TestDataSource();
             DataLoader.LoadTestData().Bind(testDataSource);
@@ -52,50 +35,17 @@ namespace SeleniumUITests.Utilities
 
             TestData = mapper.Map(testDataSource);
             User = TestData.Users["base"]["admin"];
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
-            LoginPage = new LoginPageDriver(driver);
-            NavBarPage = new NavBarPageDriver(driver);
-            SettingPage = new SettingPageDriver(driver);
-            RegistrationPage = new RegistrationPageDriver(driver);
-            NewPostPage = new NewPostPageDriver(driver);
-            ArticlePage = new ArticlePageDriver(driver);
-            UserPage = new UserPageDriver(driver);
-            UserFeedPage = new UserFeedPageDriver(driver);
+            LoginPage = new LoginPageDriver(driver.Value);
+            NavBarPage = new NavBarPageDriver(driver.Value);
+            SettingPage = new SettingPageDriver(driver.Value);
+            RegistrationPage = new RegistrationPageDriver(driver.Value);
+            NewPostPage = new NewPostPageDriver(driver.Value);
+            ArticlePage = new ArticlePageDriver(driver.Value);
+            UserPage = new UserPageDriver(driver.Value);
+            UserFeedPage = new UserFeedPageDriver(driver.Value);
         }
-
-        public LoginPageDriver LoginPage;
-        public NavBarPageDriver NavBarPage;
-        public SettingPageDriver SettingPage;
-        public RegistrationPageDriver RegistrationPage;
-        public NewPostPageDriver NewPostPage;
-        public ArticlePageDriver ArticlePage;
-        public UserPageDriver UserPage;
-        public UserFeedPageDriver UserFeedPage;
-
-        public void InitBrowser(string browserName)
-        {
-            switch(browserName)
-            {
-                case "Firefox":
-                    new WebDriverManager.DriverManager().SetUpDriver(new FirefoxConfig());
-                    driver = new FirefoxDriver();
-                    break;
-
-                case "Chrome":
-                    new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
-                    driver = new ChromeDriver();
-                    break;
-
-                case "Edge":
-                    new WebDriverManager.DriverManager().SetUpDriver(new EdgeConfig());
-                    driver = new EdgeDriver();
-                    break;
-            }
-        }
-
-        public User User;
-        public TestData TestData;
 
         [TearDown]
         public void Dispose()
@@ -109,25 +59,24 @@ namespace SeleniumUITests.Utilities
 
             if(status == TestStatus.Failed)
             {
-                test.Fail("Test failed", CaptureScreenShotFromPath(driver, fileName));
+                test.Fail("Test failed", CaptureScreenShotFromPath(driver.Value, fileName));
                 test.Log(Status.Fail, stackTrace);
             }
 
             extent.Flush();
 
-            driver.Close();
-            driver.Quit();
+            driver.Value.Close();
+            driver.Value.Quit();
         }
 
         public MediaEntityModelProvider CaptureScreenShotFromPath(IWebDriver driver, string screenShotName)
         {
             string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-            string reportpath = projectDirectory + "//Screenshots";
+            string reportpath = workingDirectory + $"//Reports//{currenTestName}";
 
             ITakesScreenshot ts = (ITakesScreenshot)driver;
-            ts.GetScreenshot().SaveAsFile(reportpath+$"//{TestContext.CurrentContext.Test.Name}//{screenShotName}.png");
-            return MediaEntityBuilder.CreateScreenCaptureFromPath(reportpath + $"//{TestContext.CurrentContext.Test.Name}//{screenShotName}.png", screenShotName).Build();
+            ts.GetScreenshot().SaveAsFile(reportpath+$"//{screenShotName}.png");
+            return MediaEntityBuilder.CreateScreenCaptureFromPath(reportpath + $"//{screenShotName}.png", screenShotName).Build();
         }
 
         public void AddReportStep(Steps steps)
@@ -135,7 +84,57 @@ namespace SeleniumUITests.Utilities
             test.Info($"Step {steps.Step}");
             test.Info("Action: " + steps.Action);
             test.Info("Expected Result: " + steps.Result);
-            test.Info("Screenshot: ", CaptureScreenShotFromPath(driver, $"Step_{steps.Step}"));
+            test.Info("Screenshot: ", CaptureScreenShotFromPath(driver.Value, $"Step_{steps.Step}"));
         }
+
+        public void InitBrowser(string browserName)
+        {
+            switch (browserName)
+            {
+                case "Firefox":
+                    new WebDriverManager.DriverManager().SetUpDriver(new FirefoxConfig());
+                    driver.Value = new FirefoxDriver();
+                    break;
+
+                case "Chrome":
+                    new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
+                    driver.Value = new ChromeDriver();
+                    break;
+
+                case "Edge":
+                    new WebDriverManager.DriverManager().SetUpDriver(new EdgeConfig());
+                    driver.Value = new EdgeDriver();
+                    break;
+            }
+        }
+
+        public void SetupReport(string testName)
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string reportpath = workingDirectory + $"//Reports//{testName}//index.html";
+            var htmlReporter = new ExtentHtmlReporter(reportpath);
+            extent = new ExtentReports();
+            extent.AttachReporter(htmlReporter);
+            extent.AddSystemInfo("Browser", browserName);
+            extent.AddSystemInfo("Environment", url);
+        }
+
+        private ThreadLocal<IWebDriver> driver = new ThreadLocal<IWebDriver>();
+        private readonly string browserName = System.Configuration.ConfigurationManager.AppSettings["browser"];
+        private readonly string url = System.Configuration.ConfigurationManager.AppSettings["url"];
+        private string currenTestName;
+        private ExtentReports extent;
+        private ExtentTest test;
+        public User User;
+        public TestData TestData;
+
+        public LoginPageDriver LoginPage;
+        public NavBarPageDriver NavBarPage;
+        public SettingPageDriver SettingPage;
+        public RegistrationPageDriver RegistrationPage;
+        public NewPostPageDriver NewPostPage;
+        public ArticlePageDriver ArticlePage;
+        public UserPageDriver UserPage;
+        public UserFeedPageDriver UserFeedPage;
     }
 }
